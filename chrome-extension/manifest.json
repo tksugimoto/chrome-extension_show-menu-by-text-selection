@@ -1,0 +1,15 @@
+{
+	"name": "テキスト選択でメニュー表示",
+	"version": "0.1.0",
+	"manifest_version": 2,
+
+	"content_scripts": [{
+		"matches": [
+			"*://*/*"
+		],
+		"all_frames": true,
+		"js": [
+			"show_menu_by_selection.js"
+		]
+	}]
+}
