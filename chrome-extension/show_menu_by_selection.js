@@ -69,14 +69,16 @@ document.body.append(popup);
 
 const refreshPopupContent = word => {
 	popup.innerText = "";
+	const documentFragment = document.createDocumentFragment();
 	patterns.forEach(pattern => {
 		const link = document.createElement("a");
 		link.innerText = pattern.name;
 		link.href = pattern.generateUrl(word);
 		link.target = "_blank";
 		link.style.display = "block";
-		popup.append(link);
+		documentFragment.append(link);
 	});
+	popup.append(documentFragment);
 };
 
 document.addEventListener("selectionchange", () => {
