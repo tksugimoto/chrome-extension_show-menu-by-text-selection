@@ -67,17 +67,27 @@ popup.style.padding = "10px";
 popup.style.display = "none";
 document.body.append(popup);
 
-const refreshPopupContent = word => {
-	popup.innerText = "";
-	patterns.forEach(pattern => {
+{
+	const contents = patterns.map(pattern => {
 		const link = document.createElement("a");
 		link.innerText = pattern.name;
-		link.href = pattern.generateUrl(word);
 		link.target = "_blank";
 		link.style.display = "block";
-		popup.append(link);
+		return {pattern, link};
 	});
-};
+
+	const documentFragment = document.createDocumentFragment();
+	contents.forEach(({link}) => {
+		documentFragment.append(link);
+	});
+	popup.append(documentFragment);
+
+	window.refreshPopupContent = word => {
+		contents.forEach(({pattern, link}) => {
+			link.href = pattern.generateUrl(word);
+		});
+	};
+}
 
 document.addEventListener("selectionchange", () => {
 	const selectedText = window.getSelection().toString().trim();
