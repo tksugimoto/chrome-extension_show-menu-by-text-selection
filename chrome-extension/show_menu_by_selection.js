@@ -89,7 +89,7 @@ document.body.append(popup);
 	};
 }
 
-document.addEventListener("selectionchange", () => {
+const updateMenu = () => {
 	const selectedText = window.getSelection().toString().trim();
 	const position = getFixedPosition();
 	if (selectedText && position && position.width) {
@@ -102,4 +102,16 @@ document.addEventListener("selectionchange", () => {
 	} else {
 		popup.style.display = "none";
 	}
-});
+};
+
+{
+	let timeoutID = null;
+	const delay_ms = 500;
+	document.addEventListener("selectionchange", () => {
+		popup.style.display = "none";
+		if (isFinite(timeoutID)) {
+			clearTimeout(timeoutID);
+		}
+		timeoutID = setTimeout(updateMenu, delay_ms);
+	});
+}
