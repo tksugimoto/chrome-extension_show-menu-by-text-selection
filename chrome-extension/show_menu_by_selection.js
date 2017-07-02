@@ -104,14 +104,21 @@ const updateMenu = () => {
 	}
 };
 
-{
+const debounce = (func, delay_ms) => {
 	let timeoutID = null;
-	const delay_ms = 500;
-	document.addEventListener("selectionchange", () => {
-		popup.style.display = "none";
+	return () => {
 		if (isFinite(timeoutID)) {
 			clearTimeout(timeoutID);
 		}
-		timeoutID = setTimeout(updateMenu, delay_ms);
+		timeoutID = setTimeout(func, delay_ms);
+	};
+};
+
+{
+	const delay_ms = 500;
+	const debouncedUpdateMenu = debounce(updateMenu, delay_ms);
+	document.addEventListener("selectionchange", () => {
+		popup.style.display = "none";
+		debouncedUpdateMenu();
 	});
 }
