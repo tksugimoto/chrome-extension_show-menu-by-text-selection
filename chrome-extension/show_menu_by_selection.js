@@ -89,7 +89,7 @@ document.body.append(popup);
 	};
 }
 
-document.addEventListener("selectionchange", () => {
+const updateMenu = () => {
 	const selectedText = window.getSelection().toString().trim();
 	const position = getFixedPosition();
 	if (selectedText && position && position.width) {
@@ -102,4 +102,23 @@ document.addEventListener("selectionchange", () => {
 	} else {
 		popup.style.display = "none";
 	}
-});
+};
+
+const debounce = (func, delay_ms) => {
+	let timeoutID = null;
+	return () => {
+		if (isFinite(timeoutID)) {
+			clearTimeout(timeoutID);
+		}
+		timeoutID = setTimeout(func, delay_ms);
+	};
+};
+
+{
+	const delay_ms = 500;
+	const debouncedUpdateMenu = debounce(updateMenu, delay_ms);
+	document.addEventListener("selectionchange", () => {
+		popup.style.display = "none";
+		debouncedUpdateMenu();
+	});
+}
